@@ -1,0 +1,40 @@
+---
+import { navigation } from '../data/content';
+const current = Astro.url.pathname;
+---
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="wordmark" href="/" aria-label="iloop.id home">iloop<span>.id</span></a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      {navigation.map(link => <a href={link.href} aria-current={current === link.href ? 'page' : undefined}>{link.label}</a>)}
+    </nav>
+    <a class="button header-cta" href="/contact/">Book a demo</a>
+    <details class="mobile-menu">
+      <summary>Menu <span class="menu-lines" aria-hidden="true"></span></summary>
+      <nav aria-label="Mobile navigation">
+        {navigation.map(link => <a href={link.href} aria-current={current === link.href ? 'page' : undefined}>{link.label}</a>)}
+        <a class="button" href="/contact/">Book a demo</a>
+      </nav>
+    </details>
+  </div>
+</header>
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>('.mobile-menu');
+  const summary = menu?.querySelector('summary');
+  function closeMenu(returnFocus = false) {
+    if (menu?.open) {
+      menu.open = false;
+      if (returnFocus) summary?.focus();
+    }
+  }
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeMenu(true);
+  });
+  document.addEventListener('click', event => {
+    if (event.target instanceof Node && !menu?.contains(event.target)) closeMenu();
+  });
+  menu?.addEventListener('focusout', event => {
+    if (event.relatedTarget instanceof Node && !menu.contains(event.relatedTarget)) closeMenu();
+  });
+  window.matchMedia('(min-width: 768px)').addEventListener('change', () => closeMenu());
+</script>

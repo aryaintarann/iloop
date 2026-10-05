@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#F7F4EE"/>
+  <rect x="900" width="300" height="630" fill="#244C3C"/>
+  <text x="80" y="100" font-family="Arial,sans-serif" font-size="42" letter-spacing="-2" fill="#244C3C">iloop.id</text>
+  <text x="80" y="265" font-family="Georgia,serif" font-size="76" fill="#242824">More time for</text>
+  <text x="80" y="355" font-family="Georgia,serif" font-size="76" fill="#244C3C">hospitality.</text>
+  <text x="80" y="470" font-family="Arial,sans-serif" font-size="27" fill="#5C635C">Guest communication for hotels.</text>
+  <text x="1050" y="425" text-anchor="middle" font-family="Georgia,serif" font-size="300" fill="#F7F4EE">i</text>
+</svg>

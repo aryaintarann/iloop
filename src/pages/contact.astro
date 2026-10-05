@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { demoEmail, waitlistEmail } from '../data/content';
+---
+<Layout title="Contact | Book a hotel demo | iloop.id" description="Book a personal iloop.id demo or join the early-access waitlist. Email hello@iloop.id to discuss guest communication for your hotel.">
+  <section class="page-intro container contact-intro"><p class="section-label">Let’s talk</p><h1>Tell us about<br /><span>your hotel.</span></h1><p class="lead">Whether you’re ready for a walkthrough or curious about early access, we’d like to hear what your team needs.</p></section>
+  <section class="contact-options container" aria-label="Contact options"><article class="demo-option"><p class="section-label">A personal walkthrough</p><h2>Book a demo.</h2><p>See how guest replies, stay messages and team handover could work for your property.</p><h3>A good place to start</h3><ul><li>Your hotel and the properties you manage</li><li>The channels your guests use</li><li>Your booking engine or property management system</li></ul><a class="button" href={demoEmail}>Email us for a demo</a><p class="email-note">Opens your email app with the demo subject ready.</p></article><article class="waitlist-option" id="early-access"><p class="section-label">Be first in the loop</p><h2>Join the waitlist.</h2><p>Interested in trying iloop.id? Get in touch about early access and ask about a pilot for your hotel.</p><a class="button button-outline" href={waitlistEmail}>Join the waitlist</a><p class="email-note">Opens your email app with the waitlist subject ready.</p></article></section>
+  <section class="direct-contact container"><div><p class="section-label">Prefer to write directly?</p><a class="email-address" href="mailto:hello@iloop.id">hello@iloop.id</a></div><p>Send us your questions and a little about your property. If you use webmail, copy this address into a new message.</p></section>
+</Layout>

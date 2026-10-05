@@ -1,0 +1,16 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Conversation from '../components/Conversation.astro';
+import CTA from '../components/CTA.astro';
+import { features, controls } from '../data/content';
+---
+<Layout title="Features | Hotel guest communication | iloop.id" description="Explore guest replies, journey automation, enquiries, upsell offers, team handover and multiple-property communication with iloop.id.">
+  <section class="page-intro container"><p class="section-label">Features</p><h1>Everyday guest care,<br /><span>with less busywork.</span></h1><p class="lead">From the first enquiry to the message after check-out, keep the conversation moving and your team in control.</p></section>
+  <section class="feature-detail container" aria-label="Hotel communication features">
+    <article class="featured-feature" id={features[0].id}><div><p class="section-label">01 / Guest communication</p><h2>{features[0].title}</h2><p class="lead">{features[0].description}</p><p>{features[0].detail}</p><div class="channel-names" id="channels"><span>WhatsApp</span><span>Website chat</span><span>Email</span></div></div><Conversation /></article>
+    <div class="feature-detail-grid">{features.slice(1).map((feature, i) => <article id={feature.id}><span class="index">0{i + 2}</span><h2>{feature.title}</h2><p>{feature.description}</p><p class="feature-note">{feature.detail}</p></article>)}</div>
+  </section>
+  <section class="reporting-section" id="results"><div class="container reporting-layout"><div><p class="section-label">Reporting</p><h2>See what’s<br />being handled.</h2><p class="lead">Track reply times, conversations handled automatically and upsells booked in one view.</p></div><figure class="report-preview"><figcaption><strong>A view of your guest communication</strong><span>Sample dashboard · Illustrative data</span></figcaption><dl><div><dt>Average reply time</dt><dd>12 <span>sec</span></dd></div><div><dt>Handled automatically</dt><dd>78<span>%</span></dd></div><div><dt>Upsells booked</dt><dd>34</dd></div></dl><p>Example values only. These are not product performance claims.</p></figure></div></section>
+  <section class="section container" id="security"><div class="section-heading"><div><p class="section-label">Team control &amp; security</p><h2>Guest care remains<br />in your hands.</h2></div><p class="lead">Set the information the assistant uses and who can access conversations. Your team decides when to take over.</p></div><div class="control-grid">{controls.map(control => <article><h3>{control.title}</h3><p>{control.description}</p></article>)}</div></section>
+  <CTA />
+</Layout>

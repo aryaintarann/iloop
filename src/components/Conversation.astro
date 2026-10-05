@@ -1,0 +1,14 @@
+---
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+---
+<figure class:list={['conversation', { compact }]}>
+  <figcaption class="conversation-heading"><span class="conversation-mark" aria-hidden="true">i</span><div><strong>Your hotel’s assistant</strong><span>Illustrative guest conversation</span></div></figcaption>
+  <div class="messages">
+    <p class="message guest">Hi! Do you offer airport pick-up? I arrive at 11 p.m. tomorrow.</p>
+    <p class="message assistant">Yes, we do. I can arrange a driver for your arrival. Shall I confirm?</p>
+    {!compact && <p class="message guest">Yes, please. Could we also have a late check-out?</p>}
+    <p class="message assistant">{compact ? 'For late check-out, I’ll check with the front desk and pass this to our team.' : 'Pick-up is booked. I’ll pass your late check-out request to the front desk.'}</p>
+  </div>
+  <p class="handover">Handed to the front desk, with conversation history</p>
+</figure>

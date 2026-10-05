@@ -136,3 +136,56 @@ Added an explicit development-only preview at `http://localhost:4321/?intro-prev
 - PASS: `node scripts/verify-loading-dev.mjs`, reduced motion on a normal URL, opt-in reveal and fade with a seen marker, replay on reload, inert/class cleanup, and return to normal behavior.
 - PASS: `npm run check`, 19 files with zero errors, warnings or hints; `npm run build`, five pages.
 - PASS: the full production `npm run test:browser` suite, including new checks that the preview parameter cannot override the session marker or reduced motion in production.
+
+## Scroll reveal follow-up
+
+Verified on 5 October 2026 with Node 24.21.0, Motion 14.0.0 and the production preview at `http://127.0.0.1:4322`.
+
+- PASS: `npm run check`, 21 files with zero errors, warnings or hints; `npm run build`, all five static routes.
+- PASS: `npm run test:browser`, all five routes at 375, 768 and 1440 pixels. Every reveal block reaches full opacity with its transform and animation styles released, and scrolling back does not replay it. Below-fold blocks on the long pages wait for viewport entry.
+- PASS: the first-visit intro finishes before content reveals start; keyboard focus reveals a pending FAQ block immediately; reduced motion bypasses reveals on every route and cancels them when the preference changes; every route retains visible content without JavaScript.
+- PASS: the complete existing interaction record above, including all internal link clicks, FAQ disclosures, mobile navigation, skip link, legacy anchors, email subjects, restored scroll, metadata and sitemap. No JavaScript, console/CSP or axe WCAG AA findings. All 15 page/viewport combinations have no horizontal overflow.
+- PASS: reviewed current Home and Features screenshots on mobile and desktop, plus the mobile Contact screenshot. Text, image overlap, spacing and contact actions retain the existing layout after scrolling.
+
+The browser suite now waits for direct-anchor smooth scrolling to reach its final pixel before measuring the intro's scroll preservation, positions wheel input over page content, and waits for a link's containing reveal before clicking an actual text fragment. This avoids measuring an intermediate scroll position or clicking empty space inside a wrapped inline link's combined bounding box. Navigation behavior remains covered by real browser clicks.
+
+Scroll animation delivery gate:
+
+- Hard gate PASS (R-03, R-24 to R-26, R-32, R-34, R-35): production build, all-route keyboard/link checks, rendered axe audits and overflow checks pass. Remaining content and asset rules retain the unchanged, documented evidence above.
+- Purpose gate PASS (R-19, R-31): one-time 18px reveals guide reading; capped sibling delays express list order. No looping motion or additional decorative effects. Completed animations release their styles.
+- Liveliness PASS: the existing hospitality direction now uses ENERGY 2 / RHYTHM 3 / MOTION 2, documented in `docs/implementation.md`; screenshots retain the heading hierarchy, spacing and forest accent.
+- Craftsmanship PASS (C-1 to C-5): the shared script covers the five routes; focused, reduced-motion and JavaScript-disabled content remains visible; no new copy, assets, statistics or claims were introduced.
+
+## FAQ plus/minus follow-up
+
+Verified the original Motion implementation on Home and How it works in production at 375, 768 and 1440 pixels.
+
+- PASS: Astro check with no diagnostics and the five-route production build.
+- PASS: `verifyFaqMotion` in the complete `npm run test:browser` suite. Answer height/opacity and icon rotation animate; the open icon settles to minus and the closed icon to plus; Enter and Space toggle disclosures; rapid reversals settle in the latest state; enabling reduced motion during collapse finishes immediately, and subsequent reduced-motion toggles create no animations. Open answers release their fixed heights.
+- PASS: the full regression suite, including all five pages at all three widths, scroll reveals, intro, all internal link clicks, native disclosures with JavaScript disabled, mobile navigation, 200% text resize and axe WCAG AA. Zero console/CSP findings or horizontal overflow.
+- PASS: reviewed `.verification/screenshots/faq-open-{375,1440}.png` and matching closed states for readable answers, icon states and native visible focus.
+
+FAQ delivery gate: hard gate PASS, supported by native fallback, keyboard, reduced-motion, axe and overflow checks; purpose gate PASS, icon rotation communicates the disclosure state while the short panel transition maintains continuity; liveliness PASS, consistent with the recorded MOTION 2 hospitality direction; craftsmanship PASS, native controls retain their content and semantics with no added claims or assets. The icon is hidden from assistive technology because the native disclosure already conveys its state.
+
+## FAQ opening-height correction
+
+Reproduced the opening defect in Chromium: a closed answer measured 97.234375px, and the opening height keyframes ran from that full height to 97px. The previous check only established that an animation object existed. A new regression assertion failed with an opening start of 97.2344px instead of zero.
+
+The opening now explicitly starts at zero whenever `details.open` is false; closing and interrupted transitions continue to read their visible height. The regression check also samples the opening animation at a quarter of its duration and requires an intermediate height greater than zero and less than the target.
+
+- PASS: the expanded FAQ check on both FAQ routes at 375, 768 and 1440 pixels, including closing, Enter/Space, rapid reversal and reduced motion.
+- PASS: Astro check, 22 files with no errors, warnings or hints; all five routes build successfully.
+- PASS: the complete production browser suite, including scroll reveals, all-route navigation, native no-JavaScript disclosures, accessibility and overflow checks with zero console/CSP findings. The FAQ delivery gate above remains satisfied.
+
+## Page transition follow-up
+
+Verified on 6 October 2026 against the production preview at `http://127.0.0.1:4322`.
+
+- PASS: Astro check, 23 files with zero errors, warnings or hints; production build, all five static routes.
+- PASS: dedicated transition checks at 375, 768 and 1440 pixels. Real link navigation from 404 through Home, Features, How it works and Contact creates outgoing/incoming View Transition animations with 240/320ms durations, opacity keyframes and an 8px incoming translation. Back/Forward reaches the correct routes, the intro stays bypassed after its first visit, and reduced motion opts out. No console/CSP findings in these contexts.
+- PASS: first-viewport headings retain full element opacity during page transitions. Reviewed `.verification/screenshots/page-transition-mid.png` at a paused intermediate frame: incoming content remains visible while the root snapshot fades and moves. Visible blocks use the page transition; below-fold blocks retain scroll reveal.
+- PASS: complete production `npm run test:browser` after the viewport coordination fix, covering all five pages at all three widths, intro, FAQ, scroll reveals, internal links, keyboard/mobile navigation, no-JavaScript access, reduced motion, 200% text resize and axe WCAG AA. Zero console/CSP findings or horizontal overflow.
+
+The first production probe reproduced a skipped incoming transition with the opt-in in an external stylesheet. An inline, CSP-hashed opt-in in the shared head resolves it. Visual review then caught content fades overlapping the page transition; scroll reveal now exposes initial viewport blocks immediately during an active native transition.
+
+Page transition delivery gate: hard gate PASS through production CSP, keyboard, reduced-motion, no-JavaScript, axe and overflow verification; purpose gate PASS through short navigation continuity; liveliness PASS within the existing MOTION 2 direction; craftsmanship PASS through shared styles/layout, native navigation fallback and coordination with existing reveals. No new content, assets or claims.

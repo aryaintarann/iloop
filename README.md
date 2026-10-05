@@ -31,6 +31,12 @@ The preview normally runs at `http://127.0.0.1:4321`. Deploy the contents of `di
 
 Edit page content in `src/pages/`, repeated content in `src/data/content.ts`, shared components in `src/components/` and styles in `src/styles/global.css`. Metadata lives in the shared layout and page props. The canonical site URL and sitemap are configured in `astro.config.mjs`.
 
+All five pages use Motion scroll reveals from `src/scripts/scroll-reveal.js`, loaded by the shared layout. Content blocks fade in with a short upward movement once when they enter the viewport; sibling blocks have a small capped delay. Reveals wait for the brand intro, show focused content immediately, and stop when reduced motion is enabled. With JavaScript disabled, content stays visible. Add a selector to the script when introducing a new content-block layout.
+
+The shared FAQ keeps native `details` and `summary` controls. Motion animates the plus/minus icon and answer height/opacity over 260ms, supports reversing an unfinished transition, and updates instantly with reduced motion. The native disclosures and static plus/minus states work without JavaScript.
+
+Internal page navigation uses native cross-document View Transitions: a 240ms outgoing fade and a 320ms incoming fade with an 8px upward movement. The shared layout supplies the opt-in before the first render, with a CSP style hash. Visible content uses the page transition while below-fold blocks retain their scroll reveals. Reduced motion disables page transitions; browsers without support keep normal document navigation. The intro still runs once per tab.
+
 The Contact page opens the visitor’s email client. It does not submit or store guest data. Sample conversations and reporting values are explicitly illustrative.
 
 ## Security and assets
@@ -48,6 +54,6 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-Set `PREVIEW_URL` if the preview uses a different origin. The check visits every page at 375, 768 and 1440 pixels; checks links, assets, overflow, FAQs, mobile keyboard navigation, skip link, email subjects, metadata, reduced motion and JavaScript-disabled access; and runs axe WCAG AA checks. Screenshots and logs go to the ignored `.verification/` folder. Recorded review: [docs/verification.md](docs/verification.md).
+Set `PREVIEW_URL` if the preview uses a different origin. The check visits every page at 375, 768 and 1440 pixels; checks links, assets, overflow, FAQs, mobile keyboard navigation, skip link, email subjects, metadata, scroll reveals, page transitions, reduced motion and JavaScript-disabled access; and runs axe WCAG AA checks. Screenshots and logs go to the ignored `.verification/` folder. Recorded review: [docs/verification.md](docs/verification.md).
 
 With the dev server running, `node scripts/verify-loading-dev.mjs` checks the explicit intro preview under reduced motion. Set `DEV_URL` if the dev server uses a different origin.

@@ -3,6 +3,9 @@ import { mkdir, access, writeFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 import { verifyLoadingScreen } from './verify-loading.mjs';
+import { verifyScrollReveal, verifyScrollPreferences } from './verify-scroll.mjs';
+import { verifyFaqMotion } from './verify-faq.mjs';
+import { verifyPageTransitions } from './verify-transitions.mjs';
 
 const routes = ['/', '/features/', '/how-it-works/', '/contact/', '/404.html'];
 for (const route of routes) {
@@ -15,8 +18,11 @@ const errors = [];
 const report = [];
 try {
   await verifyLoadingScreen(browser, base, report, errors);
+  await verifyScrollPreferences(browser, base, routes, report);
+  await verifyFaqMotion(browser, base, report);
+  await verifyPageTransitions(browser, base, report);
   for (const width of [375, 768, 1440]) {
-    const context = await browser.newContext({ viewport: { width, height: 960 } });
+    const context = await browser.newContext({ viewport: { width, height: 960 }, reducedMotion: 'no-preference' });
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(error.message));
     page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -25,6 +31,7 @@ try {
       await page.goto(base + route, { waitUntil: 'networkidle' });
       await page.evaluate(() => document.fonts.ready);
       await page.waitForFunction(() => !document.documentElement.classList.contains('intro-active'));
+      await verifyScrollReveal(page, route, width);
       assert.equal(await page.locator('h1').count(), 1);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `${route} overflow at ${width}`);
       assert.equal(await page.locator('img').evaluateAll(images => images.every(img => img.complete && img.naturalWidth > 0 && img.hasAttribute('alt'))), true);
@@ -45,6 +52,7 @@ try {
         await page.keyboard.press('Enter');
         assert.equal(await summary.evaluate(el => el.parentElement.open), true);
         await page.keyboard.press('Enter');
+        await page.waitForFunction(element => !element.parentElement.open, await summary.elementHandle());
         assert.equal(await summary.evaluate(el => el.parentElement.open), false);
       }
       if (width < 768) {
@@ -76,7 +84,18 @@ try {
           await page.goto(base + route);
           const link = page.locator(`a[href=${JSON.stringify(href)}]:visible`).first();
           if (href === '#main') await link.focus();
-          await link.click();
+          await link.scrollIntoViewIfNeeded();
+          await page.waitForFunction(element => {
+            const block = element.closest('[data-scroll-reveal]');
+            return !block || block.dataset.scrollReveal === 'revealed';
+          }, await link.elementHandle());
+          // A wrapped inline link's bounding-box center can fall between its text fragments.
+          const position = await link.evaluate(element => {
+            const bounds = element.getBoundingClientRect();
+            const fragment = element.getClientRects()[0];
+            return { x: fragment.x + fragment.width / 2 - bounds.x, y: fragment.y + fragment.height / 2 - bounds.y };
+          });
+          await link.click({ position });
           const expected = new URL(href, base + route);
           await page.waitForURL(url => url.pathname === expected.pathname && url.hash === expected.hash);
           if (expected.hash) assert.equal(await page.locator(expected.hash).count(), 1);

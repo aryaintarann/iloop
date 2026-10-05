@@ -14,6 +14,9 @@ const { title, description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const showIntro = !['/404', '/404/', '/404.html'].includes(Astro.url.pathname);
 if (showIntro) Astro.csp?.insertScriptHash(`sha256-${createHash('sha256').update(introScript).digest('base64')}`);
+// Make the navigation opt-in available before the first render, even on a warm cache.
+const transitionOptIn = '@view-transition{navigation:auto}@media(prefers-reduced-motion:reduce){@view-transition{navigation:none}}';
+Astro.csp?.insertStyleHash(`sha256-${createHash('sha256').update(transitionOptIn).digest('base64')}`);
 ---
 <!doctype html>
 <html lang="en">
@@ -25,6 +28,7 @@ if (showIntro) Astro.csp?.insertScriptHash(`sha256-${createHash('sha256').update
     <meta name="description" content={description} />
     <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
     <meta name="theme-color" content="#F7F4EE" />
+    <style set:html={transitionOptIn} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta property="og:type" content="website" />
@@ -52,3 +56,7 @@ if (showIntro) Astro.csp?.insertScriptHash(`sha256-${createHash('sha256').update
     </div>
   </body>
 </html>
+
+<script>
+  import '../scripts/scroll-reveal.js';
+</script>

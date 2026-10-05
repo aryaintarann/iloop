@@ -109,3 +109,30 @@ Four unique titles, descriptions, canonicals and Open Graph metadata are present
 ## Scope and remaining work
 
 The original root HTML entry was removed after Astro production verification. Work remains locally on `feat/astro-hospitality`; public deployment, server headers and production hosting configuration remain outside the requested change. No review findings are deferred.
+
+## Brand intro verification (5 October 2026)
+
+The loading screen change is local on `feat/loading-screen`. The existing wordmark appears on ivory with its forest suffix, reveals once per tab session, then fades for 300 ms. The normal sequence takes about 1.5 seconds after the logo font is ready; an independent deadline releases the website within three seconds. Images do not delay the intro. Layout props and the existing local `package.json` change are preserved; no dependency was added.
+
+- PASS: `npm run check`, 18 files, zero errors, warnings or hints; `npm run build`, all five static pages.
+- PASS: `PREVIEW_URL=http://127.0.0.1:4322 npm run test:browser` against production. On Windows these commands ran through `npm.cmd`; Chromium was installed using the existing Playwright package.
+- PASS: first content frame covered, centered wordmark and completed reveal screenshots at 375, 768 and 1440 pixels, exit fade, scroll/focus blocked throughout the overlay, and keyboard/scroll restored after dismissal.
+- PASS: initial visit, direct Contact route, independent new tabs, navigation and refresh in the same tab. Direct `/features/#security` keeps its anchor and scroll position; refresh preserves a restored scroll offset.
+- PASS: no JavaScript, denied storage reads or writes, initial reduced motion, reduced motion enabled during the intro, and 404. Visiting 404 first does not consume the intro for a subsequent main page.
+- PASS: held font requests keep the reveal pending; the deadline releases inert content within three seconds; late fonts cannot restart the intro. Held image requests do not delay dismissal.
+- PASS: all existing route, link, menu, FAQ, metadata, text resize, accessibility and console/CSP checks. The inline bootstrap hash is registered in Layout before the CSP meta tag is rendered.
+- PASS: fresh read-only review found no actionable defects and additionally checked history scroll restoration and Ctrl-click navigation into a new tab.
+
+Browser-native session storage semantics are retained: an explicit `window.open` with an opener can copy the source tab's seen marker. The website does not create these windows; ordinary Ctrl-click and independently opened tabs show the intro. Duplicated browser sessions were not tested.
+
+Intro screenshots are `.verification/screenshots/intro-{375,768,1440}.png`; the complete check record is `.verification/browser-results.txt`. The approved single reveal introduces the brand without looping motion, extra copy, fabricated assets or changes to the site's palette. Screenshot review confirms the final logo is legible and fully revealed at each required width.
+
+## Development intro preview follow-up
+
+Investigated the report that refresh, hot reload and new tabs never show the intro. A clean dev browser session at `http://localhost:4321/` showed the complete reveal/fade; refresh correctly skipped the stored session marker. A read-only Windows `SPI_GETCLIENTAREAANIMATION` query succeeded and reported animations disabled. Emulating reduced motion reproduced the missing intro in every fresh tab, consistent with the original reduced-motion bypass.
+
+Added an explicit development-only preview at `http://localhost:4321/?intro-preview=1`. It bypasses the seen marker and motion preference only when the dev build supplies the preview capability attribute. Returning to the normal URL preserves the original behavior. The query parameter is read by the client because these prerendered routes do not expose the request query in component frontmatter. Production omits the capability attribute, so the same query cannot replay an already seen intro or bypass reduced motion there. No Windows or browser preference was changed.
+
+- PASS: `node scripts/verify-loading-dev.mjs`, reduced motion on a normal URL, opt-in reveal and fade with a seen marker, replay on reload, inert/class cleanup, and return to normal behavior.
+- PASS: `npm run check`, 19 files with zero errors, warnings or hints; `npm run build`, five pages.
+- PASS: the full production `npm run test:browser` suite, including new checks that the preview parameter cannot override the session marker or reduced motion in production.

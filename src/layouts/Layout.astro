@@ -6,9 +6,14 @@ import '@fontsource/dm-serif-display/latin-400.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import LoadingScreen from '../components/LoadingScreen.astro';
+import { createHash } from 'node:crypto';
+import introScript from '../scripts/loading-screen.js?raw';
 interface Props { title: string; description: string; noindex?: boolean }
 const { title, description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const showIntro = !['/404', '/404/', '/404.html'].includes(Astro.url.pathname);
+if (showIntro) Astro.csp?.insertScriptHash(`sha256-${createHash('sha256').update(introScript).digest('base64')}`);
 ---
 <!doctype html>
 <html lang="en">
@@ -38,9 +43,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:image" content="https://iloop.id/og-image.jpg" />
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
-    <Header />
-    <main id="main" tabindex="-1"><slot /></main>
-    <Footer />
+    {showIntro && <LoadingScreen />}
+    <div id="site-content">
+      <a class="skip-link" href="#main">Skip to content</a>
+      <Header />
+      <main id="main" tabindex="-1"><slot /></main>
+      <Footer />
+    </div>
   </body>
 </html>

@@ -9,6 +9,8 @@ npm ci
 npm run dev
 ```
 
+The brand intro normally runs once per tab and is skipped for reduced motion. To replay it during development, open `http://localhost:4321/?intro-preview=1` (adjust the origin to the dev server URL). This explicit preview also enables the animation when reduced motion is set and replays on reload. The parameter has no effect in a production build.
+
 The development server prints its local URL. Production checks and preview:
 
 ```sh
@@ -47,3 +49,5 @@ npm run test:browser
 ```
 
 Set `PREVIEW_URL` if the preview uses a different origin. The check visits every page at 375, 768 and 1440 pixels; checks links, assets, overflow, FAQs, mobile keyboard navigation, skip link, email subjects, metadata, reduced motion and JavaScript-disabled access; and runs axe WCAG AA checks. Screenshots and logs go to the ignored `.verification/` folder. Recorded review: [docs/verification.md](docs/verification.md).
+
+With the dev server running, `node scripts/verify-loading-dev.mjs` checks the explicit intro preview under reduced motion. Set `DEV_URL` if the dev server uses a different origin.

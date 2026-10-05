@@ -1,0 +1,52 @@
+---
+import { Picture } from 'astro:assets';
+import hotel from '../assets/hotel-room.jpg';
+import Layout from '../layouts/Layout.astro';
+import Conversation from '../components/Conversation.astro';
+import CTA from '../components/CTA.astro';
+import FAQ from '../components/FAQ.astro';
+import { features, setup, journey } from '../data/content';
+---
+<Layout title="iloop.id | More time for hospitality" description="Answer guest questions, automate stay messages and keep your hotel team in control with iloop.id. Book a personal demo.">
+  <section class="home-hero container">
+    <div class="hero-copy">
+      <p class="section-label">Guest communication, thoughtfully handled</p>
+      <h1>Be there for<br />every guest.<br /><span>Even when<br class="desktop-break" /> you’re busy.</span></h1>
+      <p class="lead">Guest replies and stay messages, taken care of. Give your team more time for the hospitality only they can offer.</p>
+      <div class="actions"><a class="button" href="/contact/">Book a demo</a><a class="text-link" href="/features/">See the features</a></div>
+      <p class="hero-footnote">For hotels and the people who make them welcoming.</p>
+    </div>
+    <div class="hero-scene">
+      <Picture src={hotel} alt="A welcoming hotel room with a neatly made bed, warm wood panelling and a bedside lamp" formats={['avif', 'webp']} widths={[480, 800, 1200]} sizes="(min-width: 1200px) 600px, (min-width: 768px) 50vw, 100vw" loading="eager" fetchpriority="high" class="hero-photo" />
+      <Conversation compact />
+    </div>
+  </section>
+
+  <div class="channel-strip" id="channels"><div class="container"><p>Where your guests already are</p><ul><li>WhatsApp</li><li>Website chat</li><li>Email</li></ul></div></div>
+
+  <section class="section container" id="about">
+    <div class="section-heading"><div><p class="section-label">Space for the personal</p><h2>Less repetition.<br />More room to host.</h2></div><p class="lead">iloop.id handles everyday questions and messages, so your team can give their attention to the guest in front of them.</p></div>
+    <div class="benefit-grid" id="outcomes">
+      <article><span class="index">01</span><h3>Help at any hour</h3><p>Keep guests informed about rooms, arrival and hotel services, day and night.</p></article>
+      <article><span class="index">02</span><h3>Time back for your team</h3><p>Let the assistant take care of repeat questions and routine follow-up.</p></article>
+      <article><span class="index">03</span><h3>Relevant extras</h3><p>Bring upgrades, transfers and other offers into the guest conversation.</p></article>
+    </div>
+  </section>
+
+  <section class="feature-summary" id="features"><div class="container">
+    <div class="section-heading"><div><p class="section-label">Built around the stay</p><h2>A helpful conversation.<br />A lighter workload.</h2></div><a class="text-link" href="/features/">View all features</a></div>
+    <div class="summary-list">{features.map((feature, i) => <a href={`/features/#${feature.id}`}><span class="index">0{i + 1}</span><h3>{feature.title}</h3><span class="summary-description">{feature.description}</span><span class="link-arrow" aria-hidden="true">↗</span></a>)}</div>
+  </div></section>
+
+  <section class="section container home-process" id="how">
+    <div><p class="section-label">Made to work with your hotel</p><h2>Your information.<br />Your way of hosting.</h2><p class="lead">We set it up with you, using the details that make your property yours.</p><a class="text-link" href="/how-it-works/">See how it works</a></div>
+    <ol class="setup-list">{setup.map((step, i) => <li><span class="index">0{i + 1}</span><div><h3>{step.title}</h3><p>{step.description}</p></div></li>)}</ol>
+  </section>
+
+  <section class="journey-summary" id="journey"><div class="container"><p class="section-label">One assistant for the whole stay</p><ul>{journey.map(stage => <li>{stage.title}</li>)}</ul></div></section>
+
+  <section class="section container control-summary" id="security"><div><p class="section-label">The human touch stays with you</p><h2>Your team<br />has the final say.</h2></div><div><p class="lead">Approve the information your assistant uses, review conversations and step in when a guest needs a person. Access stays with authorised team members.</p><a class="text-link" href="/features/#security">Team control &amp; security</a><p class="report-summary" id="results">See reply times, automated conversations and upsells in one view. <a href="/features/#results">View the illustrative reporting example</a>.</p></div></section>
+
+  <section class="faq-section container" id="faq"><div><p class="section-label">Before we talk</p><h2>A few things<br />you might ask.</h2><a class="text-link" href="/how-it-works/#faq">Read all FAQs</a></div><FAQ limit={3} /></section>
+  <CTA />
+</Layout>

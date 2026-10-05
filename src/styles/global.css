@@ -104,9 +104,10 @@ summary::-webkit-details-marker { display: none; }
 .faq-list details:last-child { border-bottom: 1px solid var(--line); }
 .faq-list summary { min-height: 68px; padding: 20px 0; list-style: none; display: flex; gap: 20px; align-items: center; justify-content: space-between; cursor: pointer; font-weight: 500; }
 .faq-sign { width: 14px; height: 14px; flex-shrink: 0; position: relative; }
-.faq-sign::before, .faq-sign::after { content: ''; position: absolute; width: 14px; height: 1.5px; top: 6px; background: var(--forest); }
-.faq-sign::after { transform: rotate(90deg); }
-details[open] .faq-sign::after { transform: rotate(0deg); }
+.faq-sign > span { position: absolute; width: 14px; height: 1.5px; top: 6px; left: 0; background: var(--forest); transform-origin: center; }
+.faq-sign-vertical { transform: rotate(90deg); }
+details[open] .faq-sign-vertical { transform: rotate(0deg); }
+.faq-answer { overflow: hidden; }
 .faq-list details p { padding: 0 24px 22px 0; font-size: .95rem; }
 .cta-band { background: var(--forest); color: var(--ivory); padding-block: 56px; }
 .cta-inner { display: grid; gap: 30px; }
@@ -177,6 +178,22 @@ details[open] .faq-sign::after { transform: rotate(0deg); }
 .direct-contact > p { max-width: 45ch; font-size: .95rem; }
 .not-found { padding-block: 80px 120px; }
 .not-found .lead { margin-top: 28px; }
+::view-transition-group(root) { animation-duration: 320ms; }
+::view-transition-old(root) { animation: page-leave 240ms ease-out both; }
+::view-transition-new(root) { animation: page-enter 320ms cubic-bezier(.22, 1, .36, 1) both; }
+::view-transition-image-pair(root) { isolation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { mix-blend-mode: normal; }
+@keyframes page-leave {
+  to { opacity: 0; }
+}
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-scroll-reveal="pending"] { opacity: 0; transform: translateY(18px); }
+  [data-scroll-reveal="pending"]:focus-within { opacity: 1; transform: none; }
+}
 @media (min-width: 768px) {
   .container { width: min(1240px, calc(100% - 80px)); }
   .mobile-menu { display: none; }
@@ -236,5 +253,6 @@ details[open] .faq-sign::after { transform: rotate(0deg); }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }

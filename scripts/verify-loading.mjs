@@ -46,6 +46,7 @@ export async function verifyLoadingScreen(browser, base, report, errors) {
     assert.equal(await page.locator(':focus').textContent(), 'Skip to content');
     await page.keyboard.press('Enter');
     assert.equal(await page.locator(':focus').getAttribute('id'), 'main');
+    await page.mouse.move(width / 2, 480);
     await page.mouse.wheel(0, 500);
     await page.waitForFunction(() => scrollY > 100);
     await page.goto(base + '/features/', { waitUntil: 'domcontentloaded' });
@@ -69,7 +70,11 @@ export async function verifyLoadingScreen(browser, base, report, errors) {
   watchErrors(anchorPage);
   await anchorPage.goto(base + '/features/#security', { waitUntil: 'domcontentloaded' });
   assert.equal(await anchorPage.locator('#loading-screen').isVisible(), true);
-  await anchorPage.waitForFunction(() => scrollY > 100);
+  await anchorPage.waitForFunction(() => {
+    const target = document.getElementById('security');
+    const padding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop);
+    return scrollY === Math.round(scrollY + target.getBoundingClientRect().top - padding);
+  });
   const anchorPosition = await anchorPage.evaluate(() => scrollY);
   await waitForIntro(anchorPage);
   assert.equal(new URL(anchorPage.url()).hash, '#security');

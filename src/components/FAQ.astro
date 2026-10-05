@@ -4,5 +4,61 @@ interface Props { limit?: number }
 const { limit = faqs.length } = Astro.props;
 ---
 <div class="faq-list">
-  {faqs.slice(0, limit).map(faq => <details><summary>{faq.question}<span aria-hidden="true" class="faq-sign"></span></summary><p>{faq.answer}</p></details>)}
+  {faqs.slice(0, limit).map(faq => <details><summary>{faq.question}<span aria-hidden="true" class="faq-sign"><span></span><span class="faq-sign-vertical"></span></span></summary><div class="faq-answer"><p>{faq.answer}</p></div></details>)}
 </div>
+
+<script>
+  import { animate } from 'motion/mini';
+
+  const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  for (const details of document.querySelectorAll<HTMLDetailsElement>('.faq-list > details')) {
+    const summary = details.querySelector('summary')!;
+    const answer = details.querySelector<HTMLElement>('.faq-answer')!;
+    const vertical = details.querySelector<HTMLElement>('.faq-sign-vertical')!;
+    let expanded = details.open;
+    let panelAnimation: ReturnType<typeof animate> | undefined;
+    let iconAnimation: ReturnType<typeof animate> | undefined;
+
+    function settle() {
+      panelAnimation?.cancel();
+      iconAnimation?.cancel();
+      panelAnimation = iconAnimation = undefined;
+      details.open = expanded;
+      answer.style.removeProperty('height');
+      answer.style.removeProperty('opacity');
+      vertical.style.removeProperty('transform');
+    }
+
+    summary.addEventListener('click', event => {
+      event.preventDefault();
+      expanded = !expanded;
+      if (preference.matches) return settle();
+
+      // Preserve the current frame when a second click reverses the transition.
+      panelAnimation?.stop();
+      iconAnimation?.stop();
+      const height = details.open ? answer.getBoundingClientRect().height : 0;
+      const opacity = details.open ? Number(getComputedStyle(answer).opacity) : 0;
+      const transform = getComputedStyle(vertical).transform;
+      details.open = true;
+
+      iconAnimation = animate(vertical, {
+        transform: [transform, expanded ? 'rotate(0deg)' : 'rotate(90deg)'],
+      }, { duration: 0.26, ease: [0.22, 1, 0.36, 1] });
+      const animation = animate(answer, {
+        height: [`${height}px`, expanded ? `${answer.scrollHeight}px` : '0px'],
+        opacity: [opacity, expanded ? 1 : 0],
+      }, { duration: 0.26, ease: [0.22, 1, 0.36, 1] });
+      panelAnimation = animation;
+      animation.then(() => {
+        if (panelAnimation === animation) settle();
+      });
+    });
+
+    preference.addEventListener('change', event => {
+      if (event.matches) settle();
+    });
+    window.addEventListener('pagehide', settle);
+  }
+</script>

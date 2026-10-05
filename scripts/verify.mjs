@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdir, access, writeFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
+import { verifyLoadingScreen } from './verify-loading.mjs';
 
 const routes = ['/', '/features/', '/how-it-works/', '/contact/', '/404.html'];
 for (const route of routes) {
@@ -13,6 +14,7 @@ const browser = await chromium.launch();
 const errors = [];
 const report = [];
 try {
+  await verifyLoadingScreen(browser, base, report, errors);
   for (const width of [375, 768, 1440]) {
     const context = await browser.newContext({ viewport: { width, height: 960 } });
     const page = await context.newPage();
@@ -22,6 +24,7 @@ try {
     for (const route of routes) {
       await page.goto(base + route, { waitUntil: 'networkidle' });
       await page.evaluate(() => document.fonts.ready);
+      await page.waitForFunction(() => !document.documentElement.classList.contains('intro-active'));
       assert.equal(await page.locator('h1').count(), 1);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `${route} overflow at ${width}`);
       assert.equal(await page.locator('img').evaluateAll(images => images.every(img => img.complete && img.naturalWidth > 0 && img.hasAttribute('alt'))), true);
@@ -104,6 +107,7 @@ try {
   await reduced.close();
   const keyboard = await browser.newPage();
   await keyboard.goto(base);
+  await keyboard.waitForFunction(() => !document.documentElement.classList.contains('intro-active'));
   await keyboard.keyboard.press('Tab');
   assert.equal(await keyboard.locator(':focus').textContent(), 'Skip to content');
   await keyboard.keyboard.press('Enter');

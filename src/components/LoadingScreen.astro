@@ -1,0 +1,68 @@
+---
+import introScript from '../scripts/loading-screen.js?raw';
+---
+<script is:inline data-intro-preview={import.meta.env.DEV ? 'true' : undefined} set:html={introScript} />
+
+<div id="loading-screen" class="loading-screen" aria-hidden="true" hidden>
+  <div class="wordmark loading-wordmark"><span class="loading-name">iloop</span><span class="loading-suffix">.id</span></div>
+</div>
+
+<style is:global>
+  html.intro-active {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+
+  .loading-screen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    z-index: 10;
+    place-items: center;
+    background: var(--ivory);
+    opacity: 1;
+    transition: opacity 300ms ease;
+    touch-action: none;
+  }
+
+  .intro-active .loading-screen { display: grid; }
+  .loading-screen.is-leaving { opacity: 0; }
+
+  .loading-wordmark {
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    white-space: nowrap;
+  }
+
+  .loading-wordmark span {
+    display: inline-block;
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .loading-wordmark .loading-name {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .is-revealing .loading-wordmark span {
+    animation: intro-reveal 700ms cubic-bezier(.22, 1, .36, 1) both;
+  }
+
+  .is-revealing .loading-wordmark .loading-suffix { animation-delay: 180ms; }
+
+  @keyframes intro-reveal {
+    from { opacity: 0; clip-path: inset(0 100% 0 0); }
+    to { opacity: 1; clip-path: inset(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .intro-active:not(.intro-preview) .loading-screen { display: none; }
+    html.intro-active:not(.intro-preview) { overflow: visible; }
+    .intro-preview .loading-screen { transition: opacity 300ms ease !important; }
+    .intro-preview .is-revealing .loading-wordmark span {
+      animation: intro-reveal 700ms cubic-bezier(.22, 1, .36, 1) both !important;
+    }
+    .intro-preview .is-revealing .loading-wordmark .loading-suffix { animation-delay: 180ms !important; }
+  }
+</style>

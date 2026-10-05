@@ -1,5 +1,7 @@
 # Astro hospitality migration
 
+The SEO follow-up adds a fifth public page, `/about/`, to the original migration below. See [SEO release checks](seo-release.md) for the current sitemap, CTA event contract and external checks.
+
 Source of intent: the approved four-page migration plan provided in this session.
 
 1. Foundation: stable Astro, strict TypeScript, static routes, local licensed assets.

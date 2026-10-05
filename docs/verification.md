@@ -1,5 +1,7 @@
 # Production verification
 
+The current SEO verification is recorded in the final section. Earlier sections below describe the original four-public-page build and its subsequent animation changes.
+
 Verified on 5 October 2026 with Node 24.19.0, Astro 7.3.5, Chromium via Playwright and axe-core. Production preview: `http://127.0.0.1:4321`.
 
 - PASS: `npm run check`, 15 Astro files, zero errors, warnings or hints.
@@ -189,3 +191,42 @@ Verified on 6 October 2026 against the production preview at `http://127.0.0.1:4
 The first production probe reproduced a skipped incoming transition with the opt-in in an external stylesheet. An inline, CSP-hashed opt-in in the shared head resolves it. Visual review then caught content fades overlapping the page transition; scroll reveal now exposes initial viewport blocks immediately during an active native transition.
 
 Page transition delivery gate: hard gate PASS through production CSP, keyboard, reduced-motion, no-JavaScript, axe and overflow verification; purpose gate PASS through short navigation continuity; liveliness PASS within the existing MOTION 2 direction; craftsmanship PASS through shared styles/layout, native navigation fallback and coordination with existing reveals. No new content, assets or claims.
+
+## SEO, GEO and AIO follow-up
+
+Verified on 6 October 2026 with Node 24.21.0 and Astro 7.3.5 against production preview `http://127.0.0.1:4321`.
+
+- PASS: `npm run check`, 26 files, zero errors, warnings or hints.
+- PASS: `npm run build`, six static pages including the custom 404; sitemap contains exactly five canonical public URLs.
+- PASS: `npm run test:browser`, all six routes at 375, 768 and 1440 pixels, native navigation, FAQ, keyboard, no-JavaScript access, reduced motion, 200% text resize, intro, scroll reveals and page transitions. Zero axe WCAG A/AA findings, horizontal overflow or console/CSP errors on the successful full run.
+- PASS: static metadata and parseable Organization, WebSite and WebPage JSON-LD on all five public pages, including matching page titles/descriptions, consistent entity IDs and registered SHA-256 CSP hashes. About is reachable from every footer. The sitemap excludes 404 and internal drafts; robots.txt points to the sitemap index.
+- PASS: demo/waitlist events activated using real mouse clicks and Enter on desktop/mobile header, Home, CTA band and Contact actions. Exactly one event per activation, exactly action/placement/path fields, no query/hash leakage, correct native navigation and email destinations, and no event for ordinary feature navigation. The site has no analytics consumer, storage or transmission in the CTA handler.
+- PASS: reviewed Home on mobile/desktop, Features on mobile, Contact on mobile, About at all three required widths and How it works on desktop. Headings, copy, footer links and the expanded FAQ retain the existing typography and spacing.
+- PASS: independent read-only reviewer examined changed/untracked source, docs and generated output and found no defects. `git diff --check` is clean.
+
+The new SEO/event checks first failed against the original build because the requested Home title and CTA event were absent, then passed after implementation. A first full browser run ended on one Chromium `ERR_NO_BUFFER_SPACE` resource error. The focused checks and a complete rerun passed; the error was not reproduced and its cause was not established. Browser diagnostics now include resource URLs. No application or CSP restriction was relaxed to obtain a passing result.
+
+Raw successful results and screenshots remain in `.verification/`. Live HTTPS/redirect/crawler checks, search-console submissions, email delivery and production Core Web Vitals were not tested locally. See [release checklist](seo-release.md) and the pending inputs there. Privacy, Terms and case-study documents remain internal.
+
+SEO antislop delivery gate (scope: changed copy, About and CTA/schema integration):
+
+- R-02 PASS: new source/docs contain no em or en dashes; authored copy uses direct product descriptions.
+- R-03 PASS: all 18 route/viewport combinations and 200% mobile text checks have no overflow.
+- R-17 PASS: dashboard numbers retain their illustrative labels and explicit example-value caption; no measured results were added.
+- R-18 PASS: no testimonials, customers or people were invented.
+- R-23 PASS: About/footer addition follows the supplied plan; no new visual assets were created.
+- R-24 PASS: all internal link destinations and anchors were checked and clicked in production preview.
+- R-25 PASS: rendered axe AA audits pass; palette and text styles retain the recorded contrast checks above.
+- R-26 PASS: CTA links navigate or open the email handler; FAQ and menu controls work.
+- R-27 PASS: existing intro and custom 404 remain covered by the browser suite; this static site adds no empty data state.
+- R-28 PASS: FAQs address actual product channels, hotel information, handover, setup, pilots and unknown commercial details.
+- R-32 PASS: native Enter activation, menu Escape, focus/skip-link and FAQ keyboard checks pass.
+- R-33 PASS: functionality lives in Astro/source scripts; no runtime source patching is introduced.
+- R-34 PASS: existing light palette is retained; no theme toggle is added.
+- R-35 PASS: type check, build and production click-through suite ran successfully.
+- R-36 PASS: no new legal identity, price, integration, customer, security or performance claim is invented.
+- R-37 PASS: existing warm hospitality direction, DM Serif Display/DM Sans and forest accent are retained. ENERGY 2 / RHYTHM 3 / MOTION 2.
+- R-38 PASS: new descriptions use the confirmed product capabilities; internal templates are labelled and excluded from publication.
+- Purpose gate PASS: no new gradients, glows, generic icons, badges, shadows or decorative effects. Existing serif headings supply the hospitality voice, feature arrows mark navigation, and short reveal/disclosure motion guides reading and state changes, with reduced-motion fallback.
+- Liveliness PASS: the design read is hospitality software for hotel managers using warm editorial typography and a restrained forest accent. Existing heading hierarchy, section spacing and photo/conversation motif remain; About reuses the established layouts.
+- Craftsmanship PASS: content explains the product and next action, direct demo/waitlist labels retain native links, the full browser suite covers responsive/keyboard/no-JavaScript states, and the copy audit found no new unsupported facts or generic marketing claims.

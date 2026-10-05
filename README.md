@@ -27,11 +27,12 @@ The preview normally runs at `http://127.0.0.1:4321`. Deploy the contents of `di
 - `/features/`: six features, channels, illustrative reporting and team controls.
 - `/how-it-works/`: setup, guest journey, integrations and FAQ.
 - `/contact/`: email demo and waitlist actions.
+- `/about/`: product purpose, service approach and contact address.
 - `/404.html`: custom error page, excluded from indexing.
 
 Edit page content in `src/pages/`, repeated content in `src/data/content.ts`, shared components in `src/components/` and styles in `src/styles/global.css`. Metadata lives in the shared layout and page props. The canonical site URL and sitemap are configured in `astro.config.mjs`.
 
-All five pages use Motion scroll reveals from `src/scripts/scroll-reveal.js`, loaded by the shared layout. Content blocks fade in with a short upward movement once when they enter the viewport; sibling blocks have a small capped delay. Reveals wait for the brand intro, show focused content immediately, and stop when reduced motion is enabled. With JavaScript disabled, content stays visible. Add a selector to the script when introducing a new content-block layout.
+All six built pages use Motion scroll reveals from `src/scripts/scroll-reveal.js`, loaded by the shared layout. Content blocks fade in with a short upward movement once when they enter the viewport; sibling blocks have a small capped delay. Reveals wait for the brand intro, show focused content immediately, and stop when reduced motion is enabled. With JavaScript disabled, content stays visible. Add a selector to the script when introducing a new content-block layout.
 
 The shared FAQ keeps native `details` and `summary` controls. Motion animates the plus/minus icon and answer height/opacity over 260ms, supports reversing an unfinished transition, and updates instantly with reduced motion. The native disclosures and static plus/minus states work without JavaScript.
 
@@ -57,3 +58,11 @@ npm run test:browser
 Set `PREVIEW_URL` if the preview uses a different origin. The check visits every page at 375, 768 and 1440 pixels; checks links, assets, overflow, FAQs, mobile keyboard navigation, skip link, email subjects, metadata, scroll reveals, page transitions, reduced motion and JavaScript-disabled access; and runs axe WCAG AA checks. Screenshots and logs go to the ignored `.verification/` folder. Recorded review: [docs/verification.md](docs/verification.md).
 
 With the dev server running, `node scripts/verify-loading-dev.mjs` checks the explicit intro preview under reduced motion. Set `DEV_URL` if the dev server uses a different origin.
+
+## SEO and release
+
+Five public canonical pages use `https://iloop.id` with static Organization, WebSite and WebPage JSON-LD. Submit the Astro-generated `https://iloop.id/sitemap-index.xml` to search consoles. The 404 and internal drafts are excluded.
+
+Demo and waitlist links emit the local browser event `iloop:cta-click` with `{ action, placement, path }`. This hook does not store or send data and has no analytics consumer or conversion reporting.
+
+See [release checks and CTA contract](docs/seo-release.md). [Privacy draft](docs/internal/privacy-draft.md), [Terms draft](docs/internal/terms-draft.md) and [case study template](docs/internal/case-study-template.md) are internal documents requiring verified inputs before publication.

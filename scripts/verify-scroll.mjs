@@ -58,5 +58,5 @@ export async function verifyScrollPreferences(browser, base, routes, report) {
     assert.equal(await fallback.locator('h1').evaluate(element => getComputedStyle(element).opacity), '1', `No-JS content on ${route}`);
   }
   await noJs.close();
-  report.push('Scroll reveal: all five routes, once per block, intro coordination, keyboard focus, reduced motion on load/change and no-JS fallback PASS');
+  report.push(`Scroll reveal: all ${routes.length} routes, once per block, intro coordination, keyboard focus, reduced motion on load/change and no-JS fallback PASS`);
 }

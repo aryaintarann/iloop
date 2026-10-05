@@ -37,12 +37,18 @@ export const controls = [
 ];
 
 export const faqs = [
+  { question: 'What is iloop.id?', answer: 'iloop.id is an AI hotel chatbot and guest messaging assistant for hotel teams in Indonesia. It answers routine guest questions and handles stay messages while staff can review and take over conversations.' },
+  { question: 'Which channels does it work on?', answer: 'iloop.id works on WhatsApp, website chat and email. Tell us which channels your hotel uses when you request a demo.' },
+  { question: 'Where do its answers come from?', answer: 'The assistant uses the hotel information your team provides, including rooms, policies, services and FAQs. Your team can update that information as details change.' },
   { question: 'Does it replace my staff?', answer: 'No. It handles routine questions so your team can focus on guests. Sensitive requests go to a person.' },
   { question: 'What happens when it isn’t sure?', answer: 'It passes the conversation to your team with the history, so guests do not have to repeat themselves.' },
-  { question: 'Which channels does it work on?', answer: 'WhatsApp, website chat and email.' },
+  { question: 'Can staff take over a conversation?', answer: 'Yes. Your staff can take over with the full conversation history, review previous messages and update the information the assistant uses.' },
   { question: 'How long does setup take?', answer: 'We set it up with you using your hotel’s rooms, policies, services and FAQs. Ask us for the timeline for your property.' },
-  { question: 'Does it work with my booking system?', answer: 'It is designed to work alongside your booking engine and property management system. Tell us what you use and we will confirm the fit.' },
-  { question: 'Can I try it first?', answer: 'Join the waitlist and ask us about an early pilot for your property.' },
+  { question: 'Does it work with my PMS or booking engine?', answer: 'We check compatibility with your property management system (PMS) and booking engine for your hotel. Share the system names and what you need connected so we can confirm the fit before you proceed.', contact: true },
+  { question: 'How can I book a demo or ask about a pilot?', answer: 'Email hello@iloop.id to request a demo. Include your hotel, guest communication channels and PMS or booking engine. For a pilot, join the waitlist and tell us what you want to try at your property.', contact: true },
+  { question: 'How much does iloop.id cost?', answer: 'Contact us for pricing for your property. Share how many properties you manage and the guest messaging channels you need.', contact: true },
+  { question: 'Which guest languages are supported?', answer: 'Contact us with the languages your guests use. We will confirm the supported languages for your hotel’s setup.', contact: true },
+  { question: 'Is a specific integration available?', answer: 'Contact us with the name of the system and the workflow you need. We will confirm whether that integration is available and what setup it requires.', contact: true },
 ];
 
 export const demoEmail = 'mailto:hello@iloop.id?subject=Book%20an%20iloop.id%20demo';

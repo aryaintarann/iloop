@@ -4,8 +4,8 @@ import Conversation from '../components/Conversation.astro';
 import CTA from '../components/CTA.astro';
 import { features, controls } from '../data/content';
 ---
-<Layout title="Features | Hotel guest communication | iloop.id" description="Explore guest replies, journey automation, enquiries, upsell offers, team handover and multiple-property communication with iloop.id.">
-  <section class="page-intro container"><p class="section-label">Features</p><h1>Everyday guest care,<br /><span>with less busywork.</span></h1><p class="lead">From the first enquiry to the message after check-out, keep the conversation moving and your team in control.</p></section>
+<Layout title="Hotel Chatbot & Messaging Features | iloop.id" description="Explore iloop.id hotel chatbot features for WhatsApp, website chat and email: guest replies, stay messages, staff handover and reporting for hotel teams.">
+  <section class="page-intro container"><p class="section-label">Features</p><h1>Guest messaging features <span>for hotel teams</span></h1><p class="lead">iloop.id gives hotel teams in Indonesia an AI assistant for WhatsApp, website chat and email. Automate routine guest replies and stay messages, manage enquiries and offers, and let staff take over conversations when guests need a person.</p></section>
   <section class="feature-detail container" aria-label="Hotel communication features">
     <article class="featured-feature" id={features[0].id}><div><p class="section-label">01 / Guest communication</p><h2>{features[0].title}</h2><p class="lead">{features[0].description}</p><p>{features[0].detail}</p><div class="channel-names" id="channels"><span>WhatsApp</span><span>Website chat</span><span>Email</span></div></div><Conversation /></article>
     <div class="feature-detail-grid">{features.slice(1).map((feature, i) => <article id={feature.id}><span class="index">0{i + 2}</span><h2>{feature.title}</h2><p>{feature.description}</p><p class="feature-note">{feature.detail}</p></article>)}</div>

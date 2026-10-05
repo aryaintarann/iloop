@@ -6,8 +6,9 @@ import { verifyLoadingScreen } from './verify-loading.mjs';
 import { verifyScrollReveal, verifyScrollPreferences } from './verify-scroll.mjs';
 import { verifyFaqMotion } from './verify-faq.mjs';
 import { verifyPageTransitions } from './verify-transitions.mjs';
+import { verifySeo, verifyCtaEvents } from './verify-seo.mjs';
 
-const routes = ['/', '/features/', '/how-it-works/', '/contact/', '/404.html'];
+const routes = ['/', '/features/', '/how-it-works/', '/contact/', '/about/', '/404.html'];
 for (const route of routes) {
   await access(`dist/${route === '/' ? 'index.html' : route === '/404.html' ? '404.html' : `${route.slice(1)}index.html`}`);
 }
@@ -17,6 +18,8 @@ const browser = await chromium.launch();
 const errors = [];
 const report = [];
 try {
+  await verifySeo(browser, base, report);
+  await verifyCtaEvents(browser, base, report);
   await verifyLoadingScreen(browser, base, report, errors);
   await verifyScrollPreferences(browser, base, routes, report);
   await verifyFaqMotion(browser, base, report);
@@ -25,7 +28,11 @@ try {
     const context = await browser.newContext({ viewport: { width, height: 960 }, reducedMotion: 'no-preference' });
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(error.message));
-    page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+    page.on('console', message => { if (message.type() === 'error') errors.push(`${message.text()} (${message.location().url})`); });
+    page.on('requestfailed', request => {
+      const error = request.failure()?.errorText;
+      if (error !== 'net::ERR_ABORTED') errors.push(`${error} ${request.url()}`);
+    });
     page.on('response', response => { if (response.status() >= 400) errors.push(`${response.status()} ${response.url()}`); });
     for (const route of routes) {
       await page.goto(base + route, { waitUntil: 'networkidle' });

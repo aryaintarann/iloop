@@ -8,12 +8,12 @@ const current = Astro.url.pathname;
     <nav class="desktop-nav" aria-label="Main navigation">
       {navigation.map(link => <a href={link.href} aria-current={current === link.href ? 'page' : undefined}>{link.label}</a>)}
     </nav>
-    <a class="button header-cta" href="/contact/">Book a demo</a>
+    <a class="button header-cta" href="/contact/" data-cta-action="demo" data-cta-placement="header">Book a demo</a>
     <details class="mobile-menu">
       <summary>Menu <span class="menu-lines" aria-hidden="true"></span></summary>
       <nav aria-label="Mobile navigation">
         {navigation.map(link => <a href={link.href} aria-current={current === link.href ? 'page' : undefined}>{link.label}</a>)}
-        <a class="button" href="/contact/">Book a demo</a>
+        <a class="button" href="/contact/" data-cta-action="demo" data-cta-placement="header-mobile">Book a demo</a>
       </nav>
     </details>
   </div>

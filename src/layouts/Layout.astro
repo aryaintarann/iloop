@@ -12,6 +12,18 @@ import introScript from '../scripts/loading-screen.js?raw';
 interface Props { title: string; description: string; noindex?: boolean }
 const { title, description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const siteUrl = new URL('/', Astro.site).href;
+const organizationId = `${siteUrl}#organization`;
+const websiteId = `${siteUrl}#website`;
+const structuredData = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'Organization', '@id': organizationId, name: 'iloop.id', url: siteUrl, email: 'hello@iloop.id' },
+    { '@type': 'WebSite', '@id': websiteId, name: 'iloop.id', url: siteUrl, inLanguage: 'en', publisher: { '@id': organizationId } },
+    { '@type': 'WebPage', '@id': `${canonical.href}#webpage`, url: canonical.href, name: title, description, inLanguage: 'en', isPartOf: { '@id': websiteId }, about: { '@id': organizationId } },
+  ],
+}).replace(/</g, '\\u003c');
+Astro.csp?.insertScriptHash(`sha256-${createHash('sha256').update(structuredData).digest('base64')}`);
 const showIntro = !['/404', '/404/', '/404.html'].includes(Astro.url.pathname);
 if (showIntro) Astro.csp?.insertScriptHash(`sha256-${createHash('sha256').update(introScript).digest('base64')}`);
 // Make the navigation opt-in available before the first render, even on a warm cache.
@@ -26,6 +38,7 @@ Astro.csp?.insertStyleHash(`sha256-${createHash('sha256').update(transitionOptIn
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <script type="application/ld+json" set:html={structuredData} />
     <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
     <meta name="theme-color" content="#F7F4EE" />
     <style set:html={transitionOptIn} />
@@ -59,4 +72,5 @@ Astro.csp?.insertStyleHash(`sha256-${createHash('sha256').update(transitionOptIn
 
 <script>
   import '../scripts/scroll-reveal.js';
+  import '../scripts/cta-events.js';
 </script>

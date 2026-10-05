@@ -4,7 +4,7 @@ interface Props { limit?: number }
 const { limit = faqs.length } = Astro.props;
 ---
 <div class="faq-list">
-  {faqs.slice(0, limit).map(faq => <details><summary>{faq.question}<span aria-hidden="true" class="faq-sign"><span></span><span class="faq-sign-vertical"></span></span></summary><div class="faq-answer"><p>{faq.answer}</p></div></details>)}
+  {faqs.slice(0, limit).map(faq => <details><summary>{faq.question}<span aria-hidden="true" class="faq-sign"><span></span><span class="faq-sign-vertical"></span></span></summary><div class="faq-answer"><p>{faq.answer}{faq.contact && <> <a href="/contact/">Contact us about your hotel</a>.</>}</p></div></details>)}
 </div>
 
 <script>

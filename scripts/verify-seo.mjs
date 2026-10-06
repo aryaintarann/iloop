@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const pages = [
-  ['/', 'AI Hotel Chatbot & Guest Messaging | iloop.id', 'AI guest communication for your hotel'],
-  ['/features/', 'Hotel Chatbot & Messaging Features | iloop.id', 'Guest messaging features for hotel teams'],
+  ['/', 'iloop.id – Virtual Assistant & Automation for Hotels and Guests', 'Smarter stays, seamless journeys.'],
+  ['/features/', 'Hotel Chatbot & Messaging Features | iloop.id', 'Hospitality-ready automation, end to end.'],
   ['/how-it-works/', 'How Our Hotel AI Assistant Works | iloop.id', 'How iloop.id works with your hotel'],
   ['/contact/', 'Book an AI Hotel Chatbot Demo | iloop.id', 'Book a demo for your hotel'],
   ['/about/', 'About Our Hotel AI Assistant | iloop.id', 'About iloop.id'],
@@ -21,6 +21,7 @@ export async function verifySeo(browser, base, report) {
     assert.equal((await page.locator('h1').innerText()).replace(/\s+/g, ' '), h1);
     const description = await page.locator('meta[name="description"]').getAttribute('content');
     assert.ok(description.length > 40);
+    if (path === '/') assert.equal(description, 'iloop.id is travel technology with a virtual assistant that answers guests instantly and automates guest communication for hotels.');
     descriptions.add(description);
     const canonical = 'https://iloop.id' + path;
     assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), canonical);
@@ -29,7 +30,10 @@ export async function verifySeo(browser, base, report) {
     assert.equal(await page.locator('meta[name="robots"]').getAttribute('content'), 'index, follow');
     assert.equal(await page.getByRole('navigation', { name: 'Footer navigation' }).getByRole('link', { name: 'About', exact: true }).getAttribute('href'), '/about/');
     const opening = await page.locator('main .lead').first().innerText();
-    for (const text of ['iloop.id', 'Indonesia', 'WhatsApp', 'website chat', 'email']) assert.ok(opening.includes(text), `${path}: ${text}`);
+    assert.ok(opening.includes('iloop.id'), `${path}: product introduction`);
+    if (path === '/how-it-works/' || path === '/contact/') {
+      for (const text of ['Indonesia', 'WhatsApp', 'website chat', 'email']) assert.ok(opening.includes(text), `${path}: ${text}`);
+    }
     const scripts = page.locator('script[type="application/ld+json"]');
     assert.equal(await scripts.count(), 1);
     const json = await scripts.textContent();

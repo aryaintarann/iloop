@@ -1,12 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import CTA from '../components/CTA.astro';
+import { sections } from '../data/content';
 ---
 <Layout title="About Our Hotel AI Assistant | iloop.id" description="Learn about iloop.id, an AI guest communication assistant for hotel teams in Indonesia, and our approach to hotel information, setup and staff handover.">
   <section class="page-intro container">
     <p class="section-label">About</p>
     <h1>About <span>iloop.id</span></h1>
-    <p class="lead">iloop.id is an AI hotel chatbot and guest messaging assistant for hotel teams in Indonesia. It handles routine questions and stay messages on WhatsApp, website chat and email. Your staff can review conversations and take over when a guest needs a person.</p>
+    <p class="lead">{sections.introduction.description}</p>
   </section>
   <section class="section container integration-section">
     <div><p class="section-label">Our approach</p><h2>Start with your<br />hotel’s information.</h2></div>

@@ -18,13 +18,13 @@ Verified on 5 October 2026 with Node 24.19.0, Astro 7.3.5, Chromium via Playwrig
 | Header and footer Home, Features, How it works, Contact | Each internal destination clicked through in production; correct route loads directly. Active page indicated in header. |
 | Text wordmark | Returns to `/`. |
 | Every “Book a demo” destination | `/contact/`. |
-| “See the features” / “View all features” | `/features/`. |
+| “See what it does” / “View all features” | `/features/`. |
 | Six Home feature rows | Corresponding feature anchor on `/features/`. |
 | “See how it works” / “Discuss your setup” | `/how-it-works/` / `/contact/`. |
 | Team control & security links | `/features/#security`. |
 | Reporting example link | `/features/#results`. |
 | Read all FAQs / footer FAQ | `/how-it-works/#faq`. |
-| Ask about early access | `/contact/#early-access`. |
+| Join the waitlist (shared CTA) | `/contact/#early-access`. |
 | Home legacy anchors | `#features`, `#security`, `#faq`, `#about`, `#outcomes`, `#how`, `#journey`, `#results`, `#channels`, `#join`: every target exists and contains relevant text. |
 | Mobile Menu | Enter opens; Tab enters links; Escape closes and restores summary focus; outside click and focus leaving close the menu. Navigation links clicked on mobile. Native menu remains operable with JavaScript disabled. |
 | Home and How it works FAQ | Each summary opened and closed with Enter; answer becomes visible. Also opened with JavaScript disabled. |
@@ -230,3 +230,105 @@ SEO antislop delivery gate (scope: changed copy, About and CTA/schema integratio
 - Purpose gate PASS: no new gradients, glows, generic icons, badges, shadows or decorative effects. Existing serif headings supply the hospitality voice, feature arrows mark navigation, and short reveal/disclosure motion guides reading and state changes, with reduced-motion fallback.
 - Liveliness PASS: the design read is hospitality software for hotel managers using warm editorial typography and a restrained forest accent. Existing heading hierarchy, section spacing and photo/conversation motif remain; About reuses the established layouts.
 - Craftsmanship PASS: content explains the product and next action, direct demo/waitlist labels retain native links, the full browser suite covers responsive/keyboard/no-JavaScript states, and the copy audit found no new unsupported facts or generic marketing claims.
+
+## Reference copy and palette — 6 October 2026
+
+Applied English copy and the light palette from the supplied root `index.html`. Shared copy is stored in `src/data/content.ts`; the reference is not a runtime dependency. Homepage metadata, shared sections, FAQ, conversations, CTA, footer, favicon and social artwork were updated. Page-specific metadata and unmatched functional content remain.
+
+Validation:
+
+- `npm.cmd run check` PASS: 26 files, zero errors, warnings or hints.
+- `npm.cmd run build` PASS: all six static routes and optimized local hotel images built.
+- `npm.cmd run test:browser` PASS: all six routes at 375, 768 and 1440 pixels; axe WCAG AA, internal links, mobile menu, FAQ, loading, scroll reveals, page transitions, keyboard, no-JavaScript and reduced-motion behavior; 200% text resize; metadata, sitemap, strict CSP and CTA events. No console/CSP errors or overflow. An initial run exposed the old transition-test link label; it now expects “See what it does” and the complete rerun passed.
+- Reference comparison PASS: 99 shared text strings found in the supplied HTML, including its hidden FAQ answers and metadata.
+- Palette/text checks PASS: all 18 route/viewport combinations match the reference background, ink, secondary text, border, primary, dark-primary and accent. Browser dark preference still renders the requested light theme. No clipped text found; primary and light-button hover colors verified at desktop width.
+- Preservation checks PASS: source URLs, anchors and CTA tracking match the prior revision across nine pages/components. The hotel photograph, Header, FAQ and animation/event scripts are unchanged, allowing for checkout line endings.
+- Visual review PASS: viewport contact sheet covers all 18 combinations; full-page Home, Features, How it works and Contact screenshots checked for section wrapping and layout. Social JPEG inspected at 1200 × 630 with readable, unclipped type.
+- Read-only final source review PASS: no findings. Browser behavior was verified by the complete suite above; product claims were copied from the supplied reference, without adding independent backend claims.
+
+Evidence is in `.verification/browser-results.txt`, `.verification/palette-results.txt`, `.verification/reference-palette.json`, `.verification/preservation-results.txt`, `.verification/screenshots/` and `.verification/viewports/`.
+
+Antislop Delivery Gate:
+
+- R-02 PASS: no em dashes in site copy; the reference title's en dash is retained.
+- R-03 PASS: all 18 combinations, clipping checks and 200% resize pass.
+- R-17 PASS: dashboard values remain explicitly illustrative.
+- R-18 PASS: no testimonials or customers added.
+- R-23 PASS: favicon/social recoloring was explicitly requested; hotel photography retained.
+- R-24 PASS: all navigation destinations and legacy anchors verified.
+- R-25 PASS: axe AA audits pass at all three widths; pink is a handover border, with dark readable text.
+- R-26 PASS: menu, FAQ, demo and waitlist actions pass native activation checks.
+- R-27 PASS: loading intro and custom 404 pass; no new data-driven states introduced.
+- R-28 PASS: reference hotel FAQs and extra functional questions retained.
+- R-32 PASS: Tab, Enter, Space, Escape, skip link and focus checks pass.
+- R-33 PASS: changes are static Astro/TypeScript/CSS source edits; no runtime source patching.
+- R-34 PASS: requested light theme remains consistent under browser dark preference; no toggle.
+- R-35 PASS: type check, build and full browser click-through completed successfully.
+- R-36 PASS: no claims invented; security wording follows the supplied source.
+- R-37 PASS: direction comes from the user reference and existing layout; ENERGY 2 / RHYTHM 3 / MOTION 2.
+- R-38 PASS: sample conversation/reporting remain labelled illustrative; no invented social proof.
+- R-01 PASS: requested violet palette supplies brand identity; no gradients/glows added.
+- R-04 PASS: no icon set added; disclosure marks retain their state purpose.
+- R-06 PASS: approved DM Serif Display/DM Sans retain hierarchy and reading roles.
+- R-07 PASS: no background grids or patterns added.
+- R-08 PASS: existing feature arrows still identify navigation destinations.
+- R-09 PASS: no promotional badges added.
+- R-10 PASS: no glass surfaces added.
+- R-12 PASS: the existing conversation shadow marks elevation over the photo and now uses purple ink.
+- R-13 PASS: no glow effects added.
+- R-14 PASS: existing flagship feature and supporting list hierarchy retained.
+- R-19 PASS: animation scripts unchanged; loading, reveal, disclosure and transition checks pass.
+- R-22 PASS: existing hospitality photograph retained; no generic illustration added.
+- Liveliness PASS: declared dials match retained section rhythm, headline focus, whitespace and photograph/conversation motif; violet actions and restrained pink handover border apply the approved identity.
+- C-1 PASS: copy and palette are reference-driven; retained typography and spacing support hospitality content.
+- C-2 PASS: every control has verified native behavior.
+- C-3 PASS: existing sections serve hotel communication, setup, control or contact content.
+- C-4 PASS: responsive, keyboard, no-JavaScript, loading and reduced-motion checks pass.
+- C-5 PASS: no fabricated testimonials or measured results; reference claims remain source-authored.
+- R-05 PASS: existing layout and section rhythm preserved, including three benefit slots and compact hero conversation.
+- R-11 PASS: existing button, photo and conversation radii retained.
+- R-15 PASS: demo, waitlist and feature links name their destination or action.
+- R-16 PASS: “seamless journeys” is explicitly approved reference copy, retained verbatim.
+- R-20 PASS: retained hospitality imagery, serif voice and conversation motif accompany the supplied identity.
+- R-21 PASS: light theme follows the approved scope.
+- R-29 PASS: violet identity, light/white surfaces, dark ink and one pink accent follow the specified palette.
+- R-30 PASS: no product-clone layout introduced.
+- R-31 PASS: palette comes from the reference; layout, font, spacing and motion follow the preservation requirement.
+
+Work remains uncommitted in the current feature checkout. The supplied `index.html` remains untouched. No findings are deferred.
+
+## Text/background inversion — 6 October 2026
+
+The follow-up request supersedes the light theme: background is now `#2f1c6a` and primary text `#f4f1ff`. Secondary/link text uses lavender for contrast; conversation, reporting and demo surfaces use dark purple. Loading, favicon, social artwork and browser theme color follow the inversion. Content and interaction logic remain unchanged.
+
+- Check PASS: 26 files, zero errors, warnings or hints.
+- Build PASS: all six static routes.
+- Palette and clipping PASS: six routes at 375, 768 and 1440 pixels; inverted base colors, readable secondary colors, primary/light hover states and no clipped text.
+- Visual review PASS: all 18 viewport captures inspected in `.verification/inverted-contact-sheet.png`; desktop hero and regenerated 1200 × 630 social JPEG inspected separately.
+- Full browser regression suite PASS: all 18 route/viewport combinations, axe WCAG AA, menus, FAQs, CTA events, loading, scroll reveals, transitions, no-JavaScript, reduced motion and 200% text resize. No console/CSP errors or overflow.
+
+The earlier Delivery Gate applies to the preserved copy, layout and behavior. The new direction remains ENERGY 2 / RHYTHM 3 / MOTION 2. Fixed dark styling is explicitly requested, with no theme switch or automatic theme changes. The lighter links/focus marks and dark component surfaces support legibility rather than adding decoration.
+
+- Hard gate PASS: fresh contrast, overflow, keyboard and native-control checks pass; R-25 uses light text on dark surfaces, and R-34 follows the requested fixed dark scheme.
+- Purpose gate PASS: palette inversion follows the user instruction; link/focus colors maintain contrast; the existing conversation shadow preserves its elevation role.
+- Liveliness PASS: existing editorial typography, section rhythm, imagery and motion remain, with the inverted palette providing the requested identity.
+- Craftsmanship PASS: build and full browser suite pass; copy, URLs, fonts, layout and interaction scripts remain unchanged in this follow-up.
+
+## Hostinger-inspired light background and purple components — 6 October 2026
+
+The latest request replaces the dark treatment with an off-white lavender page background (`#f4f5ff`) and purple components (`#673de6`). Conversation, report and demo cards have white text; other areas use dark-purple headings (`#251951`) and gray secondary copy (`#58585e`). Supporting sections use a pale-purple tint; hover uses `#471ea7`. Fonts, copy, layout and interactions remain. Browser theme color, loading, favicon and social artwork follow the palette.
+
+Inspected the live [Hostinger website](https://www.hostinger.com/) and its computed styles/CSS tokens. Its primary, light-blue and gray tokens informed the palette; the user-directed light background takes precedence over the reference's current dark hero. Captures are in `.verification/hostinger-reference.png` and `.verification/hostinger-colors.json`.
+
+- Check PASS: 26 files, zero diagnostics.
+- Build PASS: all six static routes and the existing local images.
+- Palette/clipping PASS: all 18 route/viewport combinations at 375, 768 and 1440 pixels. Primary cards render purple with white text; root and secondary colors match the direction. Primary and light-button hover states pass.
+- Visual PASS: desktop hero, purple report and contact cards inspected; existing geometry and image placement retained. Captures are in `.verification/viewports/`, `.verification/purple-report.png` and `.verification/purple-contact.png`.
+- Full browser suite PASS: all 18 combinations, axe WCAG AA, menus, FAQs, CTA events, loading, scroll reveals, page transitions, no-JavaScript, reduced motion and 200% text resize. No overflow or console/CSP errors.
+
+Delivery Gate: preserved-content and layout checks from the prior gate still apply. Purple is explicitly chosen from the user reference, light/dark text follows the surface, and no new decoration, motion, claims or controls were introduced. ENERGY 2 / RHYTHM 3 / MOTION 2 remain.
+
+- Hard gate PASS: fresh axe AA, keyboard, overflow and interaction checks pass on all six routes.
+- Purpose gate PASS: purple components and pale background follow the supplied direction; text and hover colors distinguish readable surface states.
+- Liveliness PASS: editorial typography, existing photograph/conversation motif and section rhythm remain, with a consistent purple component palette.
+- Craftsmanship PASS: check, build and full browser verification pass; copy, layout and behavior are retained.

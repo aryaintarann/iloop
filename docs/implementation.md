@@ -1,5 +1,19 @@
 # Astro hospitality migration
 
+## Hostinger-inspired purple components — 6 October 2026
+
+The latest direction uses an off-white lavender background (`#f4f5ff`) with purple actions, conversation/reporting/demo cards (`#673de6`) and pale-purple supporting sections. Typography keeps the existing font families: dark purple (`#251951`) on light areas, gray (`#58585e`) for secondary copy, and white/light text on purple components. Hover uses `#471ea7`. These colors were informed by inspecting the live [Hostinger site](https://www.hostinger.com/), including its CSS tokens and computed colors, while following the user's explicit light-background request. Reference captures and values are in `.verification/hostinger-reference.png` and `.verification/hostinger-colors.json`. Loading, favicon, social artwork and browser theme color follow this light treatment. Copy, geometry, typography, navigation and interaction scripts remain; ENERGY 2 / RHYTHM 3 / MOTION 2 remain. This supersedes the dark treatment below.
+
+## Inverted text/background palette — 6 October 2026
+
+The user's follow-up swaps the base colors: background `#2f1c6a` and primary text `#f4f1ff`. The site now uses a fixed dark color scheme, with lavender secondary/link text, dark-purple component surfaces and visible focus indicators. Purple action fills and the pink handover accent remain. Loading inherits the swapped tokens; favicon, social artwork and browser theme color follow the darker treatment. Copy, layout, fonts, imagery and interaction logic are unchanged. This supersedes the light-palette direction below; ENERGY 2 / RHYTHM 3 / MOTION 2 remain.
+
+## Reference copy and palette update — 6 October 2026
+
+The supplied root `index.html` is the source for English copy and the light palette. Matching copy is stored statically in `src/data/content.ts` and used by Astro pages and shared components; the reference is not parsed or loaded at runtime. Extra contact instructions, FAQ topics and page-specific metadata remain. The homepage title, description and organization description/slogan follow the reference.
+
+The existing layout, DM Serif Display/DM Sans fonts, hotel photograph, navigation, CTA destinations, tracking attributes and animations are retained. The existing three benefit slots and compact hero conversation remain. The design read is an editorial hospitality site for hotel managers, with the requested violet identity: ENERGY 2 / RHYTHM 3 / MOTION 2; DESIGN_VARIANCE 6 / MOTION_INTENSITY 2 / VISUAL_DENSITY 3. The purple actions distinguish navigation and conversion; the pink handover border marks the point where a person takes over, with dark text for contrast. Existing CSS token names are retained, with reference palette values and a dark-purple hover variant. Loading inherits these global tokens. Favicon and editable social SVG were recolored, and the existing 1200 × 630 JPEG export regenerated.
+
 The SEO follow-up adds a fifth public page, `/about/`, to the original migration below. See [SEO release checks](seo-release.md) for the current sitemap, CTA event contract and external checks.
 
 Source of intent: the approved four-page migration plan provided in this session.

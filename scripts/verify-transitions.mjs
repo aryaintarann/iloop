@@ -20,7 +20,7 @@ export async function verifyPageTransitions(browser, base, report) {
     page.on('pageerror', error => errors.push(error.message));
     page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
     await page.goto(base + '/404.html', { waitUntil: 'networkidle' });
-    for (const [label, route] of [['Back to home', '/'], ['See the features', '/features/'], ['How it works', '/how-it-works/'], ['Book a demo', '/contact/']]) {
+    for (const [label, route] of [['Back to home', '/'], ['See what it does', '/features/'], ['How it works', '/how-it-works/'], ['Book a demo', '/contact/']]) {
       if (width < 768 && label === 'How it works') await page.locator('.mobile-menu summary').click();
       const link = page.getByRole('link', { name: label, exact: true }).first();
       await link.focus();
